@@ -8,6 +8,21 @@
 import SwiftUI
 import SwiftData
 
+struct LockedScreenWidgetView: View {
+    var text: String
+    
+    var body: some View {
+        Text(text)
+            .font(.headline)
+            .foregroundColor(.white)
+            .background(Color.red.opacity(0.85))
+            .cornerRadius(12)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .edgesIgnoringSafeArea(.all)
+    }
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
@@ -16,10 +31,8 @@ struct ContentView: View {
         NavigationSplitView {
             List {
                 ForEach(items) { item in
-                    NavigationLink {
+                    NavigationLink(destination: ItemDetailView(item: item)) {
                         Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -37,6 +50,9 @@ struct ContentView: View {
         } detail: {
             Text("Select an item")
         }
+
+        // Add locked-screen widget view
+        LockWidgetView(text: "Hello from Locked Screen!")
     }
 
     private func addItem() {
@@ -55,7 +71,42 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+private struct LockWidgetView: View {
+    var text: String
+    
+    var body: some View {
+        Text(text)
+            .font(.headline)
+            .foregroundColor(.white)
+            .background(Color.red.opacity(0.85))
+            .cornerRadius(12)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct ItemDetailView: View {
+    let item: Item
+
+    var body: some View {
+        VStack {
+            Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                .font(.headline)
+                .foregroundColor(.blue)
+            Button(action: addItem) {
+                Label("Add Other Item", systemImage: "plus.circle.fill")
+                    .padding()
+                    .background(Color.green)
+                    .cornerRadius(8)
+            }
+        }
+    }
+
+    private func addItem() {
+        withAnimation {
+            let newItem = Item(timestamp: Date())
+            ModelContext.shared.insert(newItem)
+        }
+    }
 }
