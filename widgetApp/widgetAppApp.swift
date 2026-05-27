@@ -1,32 +1,33 @@
-//
-//  widgetAppApp.swift
-//  widgetApp
-//
-//  Created by Leboreng Mathope on 2026/04/21.
-//
-
 import SwiftUI
-import SwiftData
 
 @main
-struct widgetAppApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+struct WhisperWidgetApp: App {
+    @StateObject private var messageManager: MessageManager
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    init() {
+        let repository = SharedFileMessageRepository()
+        let resolver = MessageScheduleResolver()
+
+        #if canImport(WidgetKit)
+        let reloader: WidgetReloading = WidgetCenterReloader()
+        #else
+        let reloader: WidgetReloading = NoOpWidgetReloader()
+        #endif
+
+        _messageManager = StateObject(
+            wrappedValue: MessageManager(
+                repository: repository,
+                resolver: resolver,
+                widgetReloader: reloader
+            )
+        )
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(messageManager)
+                .preferredColorScheme(.dark)
         }
-        .modelContainer(sharedModelContainer)
     }
 }

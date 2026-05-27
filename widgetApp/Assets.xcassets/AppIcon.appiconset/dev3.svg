@@ -1,0 +1,28 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gold" x1="40" y1="40" x2="216" y2="216">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="256" height="256" rx="64" fill="#0A0A0A"/>
+
+  <path
+    d="M72 76V180H132"
+    stroke="url(#gold)"
+    stroke-width="18"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M108 180V76L148 132L188 76V180"
+    stroke="url(#gold)"
+    stroke-width="18"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <circle cx="196" cy="196" r="7" fill="#FDE68A"/>
+</svg>
