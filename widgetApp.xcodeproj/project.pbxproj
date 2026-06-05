@@ -4,7 +4,11 @@
 	classes = {
 	};
 	objectVersion = 77;
-	objects = {
+objects = {
+
+/* Begin PBXBuildFile section */
+		DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		DE1C6EFB2F974F6C007FC243 /* PBXContainerItemProxy */ = {
@@ -21,12 +25,33 @@
 			remoteGlobalIDString = DE1C6EEA2F974F6A007FC243;
 			remoteInfo = widgetApp;
 		};
+		DE1D8001AAAABBBBCCCC0001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE1C6EE32F974F6A007FC243 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */;
+			remoteInfo = WhisperWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DE1D8002AAAABBBBCCCC0001 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in Embed App Extensions */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DE1C6EEB2F974F6A007FC243 /* widgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = widgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE1C6EFA2F974F6C007FC243 /* widgetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = widgetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE1C6F042F974F6C007FC243 /* widgetAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = widgetAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = WhisperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -43,6 +68,11 @@
 		DE1C6F072F974F6C007FC243 /* widgetAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = widgetAppUITests;
+			sourceTree = "<group>";
+		};
+		DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WhisperWidgetExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -69,6 +99,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE1D8005AAAABBBBCCCC0001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -76,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				DE1C6EED2F974F6A007FC243 /* widgetApp */,
+				DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */,
 				DE1C6EFD2F974F6C007FC243 /* widgetAppTests */,
 				DE1C6F072F974F6C007FC243 /* widgetAppUITests */,
 				DE1C6EEC2F974F6A007FC243 /* Products */,
@@ -86,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				DE1C6EEB2F974F6A007FC243 /* widgetApp.app */,
+				DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */,
 				DE1C6EFA2F974F6C007FC243 /* widgetAppTests.xctest */,
 				DE1C6F042F974F6C007FC243 /* widgetAppUITests.xctest */,
 			);
@@ -102,10 +141,12 @@
 				DE1C6EE72F974F6A007FC243 /* Sources */,
 				DE1C6EE82F974F6A007FC243 /* Frameworks */,
 				DE1C6EE92F974F6A007FC243 /* Resources */,
+				DE1D8002AAAABBBBCCCC0001 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DE1D8008AAAABBBBCCCC0001 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				DE1C6EED2F974F6A007FC243 /* widgetApp */,
@@ -116,6 +157,29 @@
 			productName = widgetApp;
 			productReference = DE1C6EEB2F974F6A007FC243 /* widgetApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE1D8012AAAABBBBCCCC0001 /* Build configuration list for PBXNativeTarget "WhisperWidgetExtension" */;
+			buildPhases = (
+				DE1D8006AAAABBBBCCCC0001 /* Sources */,
+				DE1D8005AAAABBBBCCCC0001 /* Frameworks */,
+				DE1D8007AAAABBBBCCCC0001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DE1C6EED2F974F6A007FC243 /* widgetApp */,
+				DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */,
+			);
+			name = WhisperWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = WhisperWidgetExtension;
+			productReference = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		DE1C6EF92F974F6C007FC243 /* widgetAppTests */ = {
 			isa = PBXNativeTarget;
@@ -176,6 +240,9 @@
 					DE1C6EEA2F974F6A007FC243 = {
 						CreatedOnToolsVersion = 26.4.1;
 					};
+					DE1D8009AAAABBBBCCCC0001 = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
 					DE1C6EF92F974F6C007FC243 = {
 						CreatedOnToolsVersion = 26.4.1;
 						TestTargetID = DE1C6EEA2F974F6A007FC243;
@@ -201,6 +268,7 @@
 			projectRoot = "";
 			targets = (
 				DE1C6EEA2F974F6A007FC243 /* widgetApp */,
+				DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */,
 				DE1C6EF92F974F6C007FC243 /* widgetAppTests */,
 				DE1C6F032F974F6C007FC243 /* widgetAppUITests */,
 			);
@@ -223,6 +291,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		DE1C6F022F974F6C007FC243 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE1D8007AAAABBBBCCCC0001 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +328,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE1D8006AAAABBBBCCCC0001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +347,11 @@
 			isa = PBXTargetDependency;
 			target = DE1C6EEA2F974F6A007FC243 /* widgetApp */;
 			targetProxy = DE1C6F052F974F6C007FC243 /* PBXContainerItemProxy */;
+		};
+		DE1D8008AAAABBBBCCCC0001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */;
+			targetProxy = DE1D8001AAAABBBBCCCC0001 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -394,6 +481,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = widgetApp/widgetApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ972YCKTK;
 				ENABLE_PREVIEWS = YES;
@@ -426,6 +514,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = widgetApp/widgetApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ972YCKTK;
 				ENABLE_PREVIEWS = YES;
@@ -532,6 +621,54 @@
 			};
 			name = Release;
 		};
+		DE1D8010AAAABBBBCCCC0001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = WhisperWidgetExtension/WhisperWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ972YCKTK;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/WhisperWidgetExtension-Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = lm22.widgetApp.WhisperWidgetExtension;
+				PRODUCT_NAME = WhisperWidgetExtension;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG WIDGET_EXTENSION $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DE1D8011AAAABBBBCCCC0001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = WhisperWidgetExtension/WhisperWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ972YCKTK;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/WhisperWidgetExtension-Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = lm22.widgetApp.WhisperWidgetExtension;
+				PRODUCT_NAME = WhisperWidgetExtension;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WIDGET_EXTENSION $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -567,6 +704,15 @@
 			buildConfigurations = (
 				DE1C6F152F974F6C007FC243 /* Debug */,
 				DE1C6F162F974F6C007FC243 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE1D8012AAAABBBBCCCC0001 /* Build configuration list for PBXNativeTarget "WhisperWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE1D8010AAAABBBBCCCC0001 /* Debug */,
+				DE1D8011AAAABBBBCCCC0001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if !WIDGET_EXTENSION
 @main
 struct WhisperWidgetApp: App {
     @StateObject private var messageManager: MessageManager
@@ -31,3 +32,4 @@ struct WhisperWidgetApp: App {
         }
     }
 }
+#endif

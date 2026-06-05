@@ -11,7 +11,7 @@ struct WhisperWidget: Widget {
         }
         .configurationDisplayName("WhisperWidget")
         .description("Shows the next scheduled custom message.")
-        .supportedFamilies([.accessoryInline, .accessoryRectangular])
+        .supportedFamilies([.accessoryCircular, .accessoryInline, .accessoryRectangular])
     }
 }
 #endif
