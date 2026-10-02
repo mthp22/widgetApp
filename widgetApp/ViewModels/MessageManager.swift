@@ -1,15 +1,30 @@
 import Foundation
 import Combine
 
+/// UI facing message store: loads the library, applies validated mutations and
+/// asks WidgetKit to refresh after every successful change.
+///
+/// Responsibilities are intentionally narrow — persistence lives behind
+/// ``MessageRepository``, scheduling behind ``MessageScheduleResolving`` and
+/// widget refresh behind ``WidgetReloading`` — so this type coordinates them
+/// rather than reimplementing any of them.
+@MainActor
 protocol MessageManaging: AnyObject {
     var messages: [Message] { get }
+    var lastPersistenceError: String? { get }
+
     func reload() throws
     func createMessage(content: String, scheduledDate: Date?, repeatDays: Set<Int>?, style: MessageStyle) throws
     func updateMessage(_ message: Message) throws
     func deleteMessage(id: UUID) throws
+
     func nextScheduledEntry(at date: Date) -> ScheduledMessage?
+    func scheduledDate(for message: Message, after date: Date) -> Date?
+    func currentDisplay(at date: Date) -> MessageDisplay?
+    func refreshWidget()
 }
 
+@MainActor
 final class MessageManager: ObservableObject, MessageManaging {
     @Published private(set) var messages: [Message] = []
     @Published private(set) var lastPersistenceError: String?
@@ -17,57 +32,71 @@ final class MessageManager: ObservableObject, MessageManaging {
     private let repository: MessageRepository
     private let resolver: MessageScheduleResolving
     private let widgetReloader: WidgetReloading
-    private let dateProvider: () -> Date
-
-    private var checkTimer: Timer?
-    private var lastKnownEntry: ScheduledMessage?
 
     init(
         repository: MessageRepository,
-        resolver: MessageScheduleResolving = MessageScheduleResolver(),
-        widgetReloader: WidgetReloading = NoOpWidgetReloader(),
-        dateProvider: @escaping () -> Date = Date.init,
-        backgroundChecksEnabled: Bool = true
+        resolver: MessageScheduleResolving,
+        widgetReloader: WidgetReloading
     ) {
         self.repository = repository
         self.resolver = resolver
         self.widgetReloader = widgetReloader
-        self.dateProvider = dateProvider
 
         do {
             try reload()
-            if backgroundChecksEnabled {
-                startBackgroundScheduleChecks()
-            }
         } catch {
-            lastPersistenceError = error.localizedDescription
+            // `reload()` already recorded the failure in `lastPersistenceError`,
+            // which the UI surfaces as a visible persistence error state.
         }
     }
 
-    deinit {
-        checkTimer?.invalidate()
-    }
+    // MARK: Reading
 
     func reload() throws {
-        messages = try repository.fetchMessages()
-        refreshWidgetIfNeeded(force: true)
+        do {
+            messages = try repository.fetchMessages()
+            lastPersistenceError = nil
+        } catch {
+            lastPersistenceError = error.localizedDescription
+            throw error
+        }
     }
 
-    func createMessage(content: String, scheduledDate: Date?, repeatDays: Set<Int>?, style: MessageStyle) throws {
-        let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedContent.isEmpty else {
-            throw MessageManagerError.emptyContent
-        }
+    func nextScheduledEntry(at date: Date) -> ScheduledMessage? {
+        resolver.nextScheduledMessage(from: messages, after: date)
+    }
 
-        let message = Message(
-            content: trimmedContent,
-            scheduledDate: scheduledDate,
-            repeatDays: repeatDays,
-            widgetStyle: style
+    func currentDisplay(at date: Date) -> MessageDisplay? {
+        resolver.currentDisplay(at: date, in: messages)
+    }
+
+    func scheduledDate(for message: Message, after date: Date) -> Date? {
+        resolver.scheduledDate(for: message, after: date)
+    }
+
+    /// Explicitly asks WidgetKit to rebuild every timeline, used by Settings.
+    func refreshWidget() {
+        widgetReloader.reloadAllTimelines()
+    }
+
+    // MARK: Mutations
+
+    func createMessage(
+        content: String,
+        scheduledDate: Date?,
+        repeatDays: Set<Int>?,
+        style: MessageStyle
+    ) throws {
+        let message = try validated(
+            Message(
+                content: content,
+                scheduledDate: scheduledDate,
+                repeatDays: repeatDays,
+                widgetStyle: style
+            )
         )
 
-        messages.append(message)
-        try persistChanges()
+        try persist(messages + [message])
     }
 
     func updateMessage(_ message: Message) throws {
@@ -75,71 +104,67 @@ final class MessageManager: ObservableObject, MessageManaging {
             throw MessageManagerError.messageNotFound
         }
 
-        let trimmedContent = message.content.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedContent.isEmpty else {
-            throw MessageManagerError.emptyContent
-        }
+        let updated = try validated(message)
+        var next = messages
+        next[index] = updated
 
-        var updated = message
-        updated.content = trimmedContent
-        updated.repeatDays = updated.repeatDays?.isEmpty == true ? nil : updated.repeatDays
-
-        messages[index] = updated
-        try persistChanges()
+        try persist(next)
     }
 
     func deleteMessage(id: UUID) throws {
-        guard let index = messages.firstIndex(where: { $0.id == id }) else {
+        guard messages.contains(where: { $0.id == id }) else {
             throw MessageManagerError.messageNotFound
         }
 
-        messages.remove(at: index)
-        try persistChanges()
+        try persist(messages.filter { $0.id != id })
     }
 
-    func nextScheduledEntry(at date: Date = Date()) -> ScheduledMessage? {
-        resolver.nextScheduledMessage(from: messages, after: date)
-    }
+    // MARK: - Private
 
-    func startBackgroundScheduleChecks(interval: TimeInterval = 60) {
-        checkTimer?.invalidate()
-        checkTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            self?.refreshWidgetIfNeeded(force: false)
+    /// Validates a message and normalizes it before it reaches storage.
+    private func validated(_ message: Message) throws -> Message {
+        guard !message.normalizedContent.isEmpty else {
+            throw MessageManagerError.emptyContent
         }
+
+        if message.hasRepeatingSchedule, message.scheduledDate == nil {
+            throw MessageManagerError.missingRepeatingTime
+        }
+
+        var normalized = message
+        normalized.content = message.normalizedContent
+        return normalized
     }
 
-    private func persistChanges() throws {
+    /// Writes `messages` first and only publishes them once storage succeeded,
+    /// so in-memory state can never drift from what is actually persisted.
+    private func persist(_ messages: [Message]) throws {
         do {
             try repository.saveMessages(messages)
-            lastPersistenceError = nil
-            refreshWidgetIfNeeded(force: true)
         } catch {
             lastPersistenceError = error.localizedDescription
             throw error
         }
-    }
 
-    private func refreshWidgetIfNeeded(force: Bool) {
-        let now = dateProvider()
-        let currentEntry = resolver.nextScheduledMessage(from: messages, after: now)
-
-        if force || currentEntry != lastKnownEntry {
-            widgetReloader.reloadAllTimelines()
-            lastKnownEntry = currentEntry
-        }
+        self.messages = messages
+        lastPersistenceError = nil
+        widgetReloader.reloadAllTimelines()
     }
 }
 
-enum MessageManagerError: LocalizedError {
+enum MessageManagerError: LocalizedError, Equatable {
     case emptyContent
     case messageNotFound
+    case missingRepeatingTime
 
     var errorDescription: String? {
         switch self {
         case .emptyContent:
             "Message content can’t be empty."
         case .messageNotFound:
-            "Message no longer exists."
+            "That message no longer exists."
+        case .missingRepeatingTime:
+            "Repeating messages need a time of day to repeat at."
         }
     }
 }
