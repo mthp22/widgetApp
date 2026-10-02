@@ -1,17 +1,21 @@
-#if canImport(WidgetKit)
 import WidgetKit
 import SwiftUI
 
+/// The widget configuration registered with WidgetKit.
 struct WhisperWidget: Widget {
     let kind: String = WhisperStorageConfiguration.widgetKind
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: WhisperWidgetEntryViewPalette()) { entry in
+        StaticConfiguration(kind: kind, provider: WhisperWidgetTimelineProvider()) { entry in
             WhisperWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("WhisperWidget")
-        .description("Shows the next scheduled custom message.")
-        .supportedFamilies([.accessoryCircular, .accessoryInline, .accessoryRectangular])
+        .configurationDisplayName("Whisper")
+        .description("Displays your next scheduled personal message on the Home Screen and Lock Screen.")
+        .supportedFamilies([
+            .systemSmall,
+            .accessoryCircular,
+            .accessoryInline,
+            .accessoryRectangular
+        ])
     }
 }
-#endif

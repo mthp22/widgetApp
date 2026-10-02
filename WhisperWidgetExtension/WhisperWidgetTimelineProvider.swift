@@ -1,64 +1,32 @@
-#if canImport(WidgetKit)
 import WidgetKit
 import SwiftUI
 
-struct WhisperWidgetEntryViewPalette: TimelineProvider {
-    typealias Entry = WhisperWidgetEntry
+/// Supplies WidgetKit with entries built from the shared message library.
+///
+/// This type only translates `WidgetDataSource` output into WidgetKit's
+/// callback API — it owns no state and never touches the application UI.
+struct WhisperWidgetTimelineProvider: TimelineProvider {
+    private let dataSource: WidgetDataSource
 
-    private let managerFactory: () -> MessageManager
-
-    init(managerFactory: @escaping () -> MessageManager = WhisperWidgetEntryViewPalette.defaultManagerFactory) {
-        self.managerFactory = managerFactory
+    init(dataSource: WidgetDataSource = WidgetDataSource()) {
+        self.dataSource = dataSource
     }
 
+    /// Gallery previews use the genuine empty state, never fabricated content.
     func placeholder(in context: Context) -> WhisperWidgetEntry {
-        WhisperWidgetEntry(date: Date(), text: "No message scheduled", style: .formal)
+        .empty(at: Date())
     }
 
+    /// Snapshots read the real persisted library, so the widget gallery shows
+    /// exactly what the user has stored.
     func getSnapshot(in context: Context, completion: @escaping (WhisperWidgetEntry) -> Void) {
-        completion(currentEntry(at: Date()))
+        completion(dataSource.currentEntry(at: Date()))
     }
 
+    /// Builds a timeline covering the upcoming schedule changes.
     func getTimeline(in context: Context, completion: @escaping (Timeline<WhisperWidgetEntry>) -> Void) {
         let now = Date()
-        let manager = managerFactory()
-        let currentEntry = currentEntry(at: now, manager: manager)
-
-        let nextRefreshDate: Date
-        if let scheduled = manager.nextScheduledEntry(at: now), scheduled.fireDate > now {
-            nextRefreshDate = scheduled.fireDate
-        } else {
-            nextRefreshDate = Calendar.current.date(byAdding: .minute, value: 30, to: now) ?? now.addingTimeInterval(1800)
-        }
-
-        completion(Timeline(entries: [currentEntry], policy: .after(nextRefreshDate)))
-    }
-
-    private func currentEntry(at date: Date, manager: MessageManager? = nil) -> WhisperWidgetEntry {
-        let manager = manager ?? managerFactory()
-
-        guard let scheduled = manager.nextScheduledEntry(at: date) else {
-            return WhisperWidgetEntry(
-                date: date,
-                text: "No message scheduled",
-                style: .formal
-            )
-        }
-
-        return WhisperWidgetEntry(
-            date: date,
-            text: scheduled.message.content,
-            style: scheduled.message.widgetStyle
-        )
-    }
-
-    private static func defaultManagerFactory() -> MessageManager {
-        MessageManager(
-            repository: SharedFileMessageRepository(),
-            resolver: MessageScheduleResolver(),
-            widgetReloader: NoOpWidgetReloader(),
-            backgroundChecksEnabled: false
-        )
+        let widgetTimeline = dataSource.timeline(from: now)
+        completion(Timeline(entries: widgetTimeline.entries, policy: widgetTimeline.policy))
     }
 }
-#endif
