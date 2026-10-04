@@ -7,7 +7,8 @@
 
 import XCTest
 
-final class widgetAppUITestsLaunchTests: XCTestCase {
+/// Launch coverage: the app opens on the message library and can be captured.
+final class WidgetAppUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

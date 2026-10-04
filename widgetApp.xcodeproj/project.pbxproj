@@ -4,10 +4,12 @@
 	classes = {
 	};
 	objectVersion = 77;
-objects = {
+	objects = {
 
 /* Begin PBXBuildFile section */
 		DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */; };
+		DECEF9AA2FD2C4CE005D34ED /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */; };
+		DECEF9AE2FD2C5BD005D34ED /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,7 +31,7 @@ objects = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DE1C6EE32F974F6A007FC243 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */;
+			remoteGlobalIDString = DE1D8009AAAABBBBCCCC0001;
 			remoteInfo = WhisperWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
@@ -51,7 +53,8 @@ objects = {
 		DE1C6EEB2F974F6A007FC243 /* widgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = widgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE1C6EFA2F974F6C007FC243 /* widgetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = widgetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE1C6F042F974F6C007FC243 /* widgetAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = widgetAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = WhisperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WhisperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +78,11 @@ objects = {
 			path = WhisperWidgetExtension;
 			sourceTree = "<group>";
 		};
+		DE5A0001AAAABBBBCCCC0010 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +90,7 @@ objects = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DECEF9AE2FD2C5BD005D34ED /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +112,7 @@ objects = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DECEF9AA2FD2C4CE005D34ED /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +124,10 @@ objects = {
 			children = (
 				DE1C6EED2F974F6A007FC243 /* widgetApp */,
 				DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */,
+				DE5A0001AAAABBBBCCCC0010 /* Shared */,
 				DE1C6EFD2F974F6C007FC243 /* widgetAppTests */,
 				DE1C6F072F974F6C007FC243 /* widgetAppUITests */,
+				DECEF9A72FD2C4CA005D34ED /* Frameworks */,
 				DE1C6EEC2F974F6A007FC243 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -129,6 +141,14 @@ objects = {
 				DE1C6F042F974F6C007FC243 /* widgetAppUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DECEF9A72FD2C4CA005D34ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,6 +170,7 @@ objects = {
 			);
 			fileSystemSynchronizedGroups = (
 				DE1C6EED2F974F6A007FC243 /* widgetApp */,
+				DE5A0001AAAABBBBCCCC0010 /* Shared */,
 			);
 			name = widgetApp;
 			packageProductDependencies = (
@@ -157,29 +178,6 @@ objects = {
 			productName = widgetApp;
 			productReference = DE1C6EEB2F974F6A007FC243 /* widgetApp.app */;
 			productType = "com.apple.product-type.application";
-		};
-		DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DE1D8012AAAABBBBCCCC0001 /* Build configuration list for PBXNativeTarget "WhisperWidgetExtension" */;
-			buildPhases = (
-				DE1D8006AAAABBBBCCCC0001 /* Sources */,
-				DE1D8005AAAABBBBCCCC0001 /* Frameworks */,
-				DE1D8007AAAABBBBCCCC0001 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				DE1C6EED2F974F6A007FC243 /* widgetApp */,
-				DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */,
-			);
-			name = WhisperWidgetExtension;
-			packageProductDependencies = (
-			);
-			productName = WhisperWidgetExtension;
-			productReference = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 		DE1C6EF92F974F6C007FC243 /* widgetAppTests */ = {
 			isa = PBXNativeTarget;
@@ -227,6 +225,29 @@ objects = {
 			productReference = DE1C6F042F974F6C007FC243 /* widgetAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE1D8012AAAABBBBCCCC0001 /* Build configuration list for PBXNativeTarget "WhisperWidgetExtension" */;
+			buildPhases = (
+				DE1D8006AAAABBBBCCCC0001 /* Sources */,
+				DE1D8005AAAABBBBCCCC0001 /* Frameworks */,
+				DE1D8007AAAABBBBCCCC0001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */,
+				DE5A0001AAAABBBBCCCC0010 /* Shared */,
+			);
+			name = WhisperWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = WhisperWidgetExtension;
+			productReference = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -240,9 +261,6 @@ objects = {
 					DE1C6EEA2F974F6A007FC243 = {
 						CreatedOnToolsVersion = 26.4.1;
 					};
-					DE1D8009AAAABBBBCCCC0001 = {
-						CreatedOnToolsVersion = 26.4.1;
-					};
 					DE1C6EF92F974F6C007FC243 = {
 						CreatedOnToolsVersion = 26.4.1;
 						TestTargetID = DE1C6EEA2F974F6A007FC243;
@@ -250,6 +268,9 @@ objects = {
 					DE1C6F032F974F6C007FC243 = {
 						CreatedOnToolsVersion = 26.4.1;
 						TestTargetID = DE1C6EEA2F974F6A007FC243;
+					};
+					DE1D8009AAAABBBBCCCC0001 = {
+						CreatedOnToolsVersion = 26.4.1;
 					};
 				};
 			};
@@ -480,12 +501,13 @@ objects = {
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = widgetApp/widgetApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ972YCKTK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WhisperWidget;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -513,12 +535,13 @@ objects = {
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = widgetApp/widgetApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ972YCKTK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WhisperWidget;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -554,6 +577,7 @@ objects = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -575,6 +599,7 @@ objects = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -594,6 +619,7 @@ objects = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -613,6 +639,7 @@ objects = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -630,13 +657,13 @@ objects = {
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ972YCKTK;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Config/WhisperWidgetExtension-Info.plist;
+				INFOPLIST_FILE = "WhisperWidgetExtension/Config/WhisperWidgetExtension-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lm22.widgetApp.WhisperWidgetExtension;
 				PRODUCT_NAME = WhisperWidgetExtension;
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG WIDGET_EXTENSION $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -654,13 +681,13 @@ objects = {
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ972YCKTK;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Config/WhisperWidgetExtension-Info.plist;
+				INFOPLIST_FILE = "WhisperWidgetExtension/Config/WhisperWidgetExtension-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lm22.widgetApp.WhisperWidgetExtension;
 				PRODUCT_NAME = WhisperWidgetExtension;
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WIDGET_EXTENSION $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
