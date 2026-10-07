@@ -27,7 +27,11 @@ struct ContentView: View {
     }
 
     /// Picks up changes made while the app was in the background (for example
-    /// an iCloud-restored library or a future extension writing to the store).
+    /// an iCloud-restored library or another writer touching the store) and
+    /// asks WidgetKit to rebuild so the widget never lags behind the app.
+    ///
+    /// Between these foreground refreshes the widget's own timeline policy
+    /// guarantees an automatic refresh every 15 minutes.
     private func reloadOnActivation() {
         do {
             try manager.reload()
@@ -35,5 +39,6 @@ struct ContentView: View {
             // `reload()` records the failure in `lastPersistenceError`, which
             // the message list renders as a visible storage problem.
         }
+        manager.refreshWidget()
     }
 }

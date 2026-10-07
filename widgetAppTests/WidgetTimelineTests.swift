@@ -17,7 +17,37 @@ final class WidgetTimelineTests: XCTestCase {
         XCTAssertEqual(timeline.entries.count, 1)
         XCTAssertEqual(timeline.entries.first?.content, .empty)
         XCTAssertEqual(timeline.entries.first?.date, now)
-        XCTAssertEqual(timeline.policy, .after(now.addingTimeInterval(WidgetDataSource.idleRefreshInterval)))
+        XCTAssertEqual(
+            timeline.policy,
+            .after(now.addingTimeInterval(WidgetDataSource.periodicRefreshInterval))
+        )
+    }
+
+    /// Nothing is scheduled far ahead, so the periodic ceiling decides when the
+    /// widget reloads — guaranteeing the automatic 15-minute refresh.
+    func testReloadIsCappedAtThePeriodicIntervalWhenNothingIsScheduled() {
+        let timeline = WidgetDataSource.timeline(for: [], from: now, resolver: resolver)
+
+        XCTAssertEqual(
+            timeline.policy,
+            .after(now.addingTimeInterval(WidgetDataSource.periodicRefreshInterval))
+        )
+    }
+
+    /// A transition inside the 15-minute window still drives the reload, so an
+    /// imminent message never waits for the periodic refresh.
+    func testImminentTransitionDrivesTheReloadBeforeThePeriodicCeiling() {
+        let fireDate = TestClock.date(2026, 1, 5, 8, 5)
+        let message = Message(
+            content: "Soon",
+            scheduledDate: fireDate,
+            repeatDays: nil,
+            widgetStyle: .bold
+        )
+
+        let timeline = WidgetDataSource.timeline(for: [message], from: now, resolver: resolver)
+
+        XCTAssertEqual(timeline.policy, .after(fireDate))
     }
 
     func testDamagedStoreProducesAnUnavailableEntry() {
@@ -80,7 +110,12 @@ final class WidgetTimelineTests: XCTestCase {
         XCTAssertEqual(timeline.entries[1].date, fireDate)
         XCTAssertNil(timeline.entries[1].caption)
 
-        XCTAssertEqual(timeline.policy, .after(fireDate))
+        // The fire date is covered by the pre-built entry, so the reload itself
+        // is scheduled by the 15-minute periodic ceiling.
+        XCTAssertEqual(
+            timeline.policy,
+            .after(now.addingTimeInterval(WidgetDataSource.periodicRefreshInterval))
+        )
     }
 
     func testActiveMessageIsRenderedWithoutACaption() {
@@ -115,7 +150,10 @@ final class WidgetTimelineTests: XCTestCase {
         // Preview until 09:00, then active — the repeating content itself never
         // changes again, so no further entries are generated.
         XCTAssertEqual(timeline.entries.count, 2)
-        XCTAssertEqual(timeline.policy, .after(TestClock.date(2026, 1, 5, 9, 0)))
+        XCTAssertEqual(
+            timeline.policy,
+            .after(now.addingTimeInterval(WidgetDataSource.periodicRefreshInterval))
+        )
     }
 
     func testLongContentIsNotTruncatedInTheDataLayer() {

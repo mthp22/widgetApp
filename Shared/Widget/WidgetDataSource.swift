@@ -15,8 +15,10 @@ struct WidgetDataSource {
     static let defaultEntryLimit = 8
     /// How far ahead transitions are pre-computed (7 days).
     static let defaultHorizon: TimeInterval = 7 * 24 * 60 * 60
-    /// Reload delay when nothing is scheduled.
-    static let idleRefreshInterval: TimeInterval = 60 * 60
+    /// Hard ceiling on the reload delay: the timeline is regenerated at least
+    /// this often so widget content is re-evaluated automatically every
+    /// 15 minutes even when nothing is scheduled.
+    static let periodicRefreshInterval: TimeInterval = 15 * 60
     /// Reload delay when the stored data cannot be read.
     static let retryRefreshInterval: TimeInterval = 15 * 60
 
@@ -96,7 +98,11 @@ struct WidgetDataSource {
             entries.append(entry(for: messages, at: transition, resolver: resolver))
         }
 
-        let refreshDate = transitions.first ?? now.addingTimeInterval(idleRefreshInterval)
+        // A scheduled transition can come sooner than the periodic ceiling, in
+        // which case the transition drives the reload; otherwise the timeline
+        // still refreshes automatically every `periodicRefreshInterval`.
+        let nextTransition = transitions.first ?? Date.distantFuture
+        let refreshDate = min(nextTransition, now.addingTimeInterval(Self.periodicRefreshInterval))
         return WidgetTimeline(entries: entries, policy: .after(refreshDate))
     }
 
