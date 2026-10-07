@@ -41,7 +41,7 @@ struct SettingsView: View {
                     usesSharedContainer ? "Available" : "Unavailable",
                     systemImage: usesSharedContainer ? "checkmark.circle" : "xmark.circle"
                 )
-                .foregroundStyle(usesSharedContainer ? AppColors.accentLight : AppColors.danger)
+                .foregroundStyle(usesSharedContainer ? AppColors.accent : AppColors.danger)
             } label: {
                 Text("App Group")
             }
@@ -72,7 +72,7 @@ struct SettingsView: View {
             if let refreshFeedback {
                 Text(refreshFeedback)
                     .font(AppTypography.caption)
-                    .foregroundStyle(AppColors.accentLight)
+                    .foregroundStyle(AppColors.accent)
                     .accessibilityLabel(refreshFeedback)
             }
         } header: {

@@ -12,7 +12,7 @@ struct EmptyStateView: View {
         VStack(spacing: 12) {
             Image(systemName: systemImage)
                 .font(.system(size: 30, weight: .semibold))
-                .foregroundStyle(AppColors.accentGradient)
+                .foregroundStyle(AppColors.accent)
                 .accessibilityHidden(true)
 
             Text(title)

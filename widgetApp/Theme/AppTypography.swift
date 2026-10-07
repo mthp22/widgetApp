@@ -5,6 +5,8 @@ import SwiftUI
 /// Rounded sans for UI chrome, with the selected ``MessageStyle`` controlling
 /// how message content itself is rendered.
 enum AppTypography {
+    /// Large screen/header display style.
+    static let display = Font.system(size: 28, weight: .bold, design: .rounded)
     static let screenTitle = Font.system(size: 24, weight: .bold, design: .rounded)
     static let sectionTitle = Font.system(size: 18, weight: .bold, design: .rounded)
     static let cardTitle = Font.system(size: 15, weight: .semibold, design: .rounded)
@@ -13,5 +15,11 @@ enum AppTypography {
     static let button = Font.system(size: 15, weight: .bold, design: .rounded)
     static let subtleButton = Font.system(size: 15, weight: .semibold, design: .rounded)
 
+    /// Step number used by the Usage guide.
+    static let stepNumber = Font.system(size: 13, weight: .bold, design: .rounded)
+
     static let largeMetric = Font.system(size: 34, weight: .bold, design: .rounded)
+
+    /// Tighter tracking for small uppercase-style captions.
+    static let captionTracking: CGFloat = 0.2
 }

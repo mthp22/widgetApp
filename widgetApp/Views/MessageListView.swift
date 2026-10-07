@@ -20,7 +20,9 @@ struct MessageListView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .whisperScreenBackground()
+            .animation(AppMotion.entrance, value: manager.messages.count)
             .navigationTitle("WhisperWidget")
+            .whisperToolbarBackground()
             .searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer(displayMode: .always),
@@ -120,7 +122,7 @@ struct MessageListView: View {
                 Label(persistenceError, systemImage: "exclamationmark.triangle")
                     .font(AppTypography.caption)
                     .foregroundStyle(AppColors.danger)
-                    .listRowBackground(AppColors.card)
+                    .listRowBackground(AppColors.surface2)
             } header: {
                 Text("Storage problem")
                     .font(AppTypography.caption)
@@ -141,19 +143,20 @@ struct MessageListView: View {
 
             Text(MessageScheduleText.scheduleLabel(for: display.message))
                 .font(AppTypography.caption)
+                .tracking(AppTypography.captionTracking)
                 .foregroundStyle(AppColors.textMuted)
 
             if display.phase == .upcoming {
                 Label(
-                    "Starts \(display.effectiveDate.formatted(date: .abbreviated, time: .shortened))",
+                    "Starts \(WhisperFormat.dateTime(display.effectiveDate))",
                     systemImage: "clock"
                 )
                 .font(AppTypography.caption)
-                .foregroundStyle(AppColors.accentLight)
+                .foregroundStyle(AppColors.accent)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .whisperCard(cornerRadius: AppTheme.controlCornerRadius, padding: 14)
+        .whisperGlass(cornerRadius: AppTheme.cardCornerRadius, padding: 14)
         .accessibilityElement(children: .combine)
     }
 

@@ -58,7 +58,7 @@ private struct DayToggleChip: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .foregroundStyle(isSelected ? AppColors.surface : AppColors.textPrimary)
-            .background(isSelected ? AnyShapeStyle(AppColors.accentGradient) : AnyShapeStyle(AppColors.card))
+            .background(isSelected ? AnyShapeStyle(AppColors.accent) : AnyShapeStyle(AppColors.surface2))
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.chipCornerRadius, style: .continuous))
         }
         .buttonStyle(.plain)

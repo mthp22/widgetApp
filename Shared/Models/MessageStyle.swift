@@ -52,13 +52,16 @@ enum MessageStyle: String, Codable, CaseIterable, Identifiable, Hashable {
     /// Hex color of the rendered message text.
     var foregroundHex: String {
         switch self {
-        case .bold: AppColors.accentLightHex
-        case .casual: AppColors.warmGoldHex
-        case .formal: AppColors.deepGoldHex
+        case .bold: AppColors.accentBrightHex
+        case .casual: AppColors.accentHex
+        case .formal: AppColors.textPrimaryHex
         }
     }
 
     /// Hex color of the surface behind the rendered message text.
+    ///
+    /// Matches the widget's own background so the composer preview shows the
+    /// real rendered result rather than an approximation.
     var backgroundHex: String {
         AppColors.surfaceHex
     }

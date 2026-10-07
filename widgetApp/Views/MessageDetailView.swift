@@ -98,11 +98,11 @@ struct MessageDetailView: View {
 
             if let next = manager.scheduledDate(for: message, after: Date()) {
                 Label(
-                    "Next occurrence \(next.formatted(date: .abbreviated, time: .shortened))",
+                    "Next occurrence \(WhisperFormat.dateTime(next))",
                     systemImage: "clock"
                 )
                 .font(AppTypography.caption)
-                .foregroundStyle(AppColors.accentLight)
+                .foregroundStyle(AppColors.accent)
             } else {
                 Label("No future occurrence", systemImage: "clock.badge.exclamationmark")
                     .font(AppTypography.caption)
@@ -112,7 +112,7 @@ struct MessageDetailView: View {
             if message.id == manager.currentDisplay(at: Date())?.message.id {
                 Label("Currently shown on your widget", systemImage: "checkmark.circle")
                     .font(AppTypography.caption)
-                    .foregroundStyle(AppColors.accentLight)
+                    .foregroundStyle(AppColors.accent)
             }
         }
         .whisperCard()

@@ -18,7 +18,7 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gearshape")
                 }
         }
-        .tint(AppColors.accentLight)
+        .tint(AppColors.accent)
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
                 reloadOnActivation()

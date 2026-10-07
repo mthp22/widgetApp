@@ -34,11 +34,17 @@ struct WhisperWidgetEntryView: View {
         }
         .padding(14)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(AppColors.surface1)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(AppColors.border, lineWidth: 1)
+                }
+                .padding(5)
+        }
         .containerBackground(for: .widget) {
-            ZStack {
-                AppColors.surface
-                AppColors.backgroundGlow
-            }
+            AppColors.surface
         }
         .accessibilityElement(children: .combine)
     }
@@ -46,7 +52,7 @@ struct WhisperWidgetEntryView: View {
     private var brandMark: some View {
         HStack(spacing: 6) {
             Circle()
-                .fill(AppColors.accentGradient)
+                .fill(AppColors.accent)
                 .frame(width: 6, height: 6)
 
             Text("Whisper")
@@ -100,7 +106,7 @@ struct WhisperWidgetEntryView: View {
         VStack(alignment: .leading, spacing: 6) {
             Image(systemName: systemImage)
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(AppColors.accentGradient)
+                .foregroundStyle(AppColors.accent)
 
             Text(title)
                 .font(.system(size: 14, weight: .semibold, design: .rounded))

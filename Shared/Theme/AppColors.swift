@@ -1,62 +1,64 @@
 import SwiftUI
 
-/// Central color tokens derived from the supplied `dev3.svg` artwork:
-/// near-black surface (`#0A0A0A`), gold gradient (`#FDE68A → #B45309`).
+/// Central colour tokens for the Whisper design system: off-white text and a
+/// deep-teal accent on a teal-charcoal surface stack.
 ///
-/// Every color literal in the project lives here so the visual identity stays
-/// consistent between the host application and the widget extension.
+/// The system is deliberately **gradient free**. Depth is produced by solid
+/// layered surfaces, hairline borders, translucent glass fills and soft
+/// shadows instead of linear gradients.
+///
+/// Every colour literal in the project lives here so the visual identity stays
+/// identical between the host application and the widget extension.
 enum AppColors {
     // MARK: Hex tokens (shared with `MessageStyle`, which is pure data)
 
-    static let surfaceHex = "#0A0A0A"
-    static let cardHex = "#111111"
-    static let accentLightHex = "#FDE68A"
-    static let deepGoldHex = "#B45309"
-    static let warmGoldHex = "#F9C469"
-    static let textPrimaryHex = "#F6E7C1"
-    static let textMutedHex = "#CDAF74"
+    /// Screen background — the darkest step of the surface stack.
+    static let surfaceHex = "#0D1110"
+    /// Cards and grouped panels.
+    static let surface1Hex = "#141A19"
+    /// Rows, controls and input fields.
+    static let surface2Hex = "#1B2221"
+    /// Raised controls: selected chips, emphasised rows.
+    static let surface3Hex = "#232B2A"
+    /// Primary accent — teal used for every interactive highlight.
+    static let accentHex = "#2DD4BF"
+    /// Darker teal for filled accents that carry dark text.
+    static let accentDeepHex = "#0F766E"
+    /// Bright teal for high-emphasis message text on dark surfaces.
+    static let accentBrightHex = "#5EEAD4"
+    static let textPrimaryHex = "#F4F7F6"
+    static let textMutedHex = "#8FA3A0"
     static let dangerHex = "#F87171"
 
-    // MARK: Color tokens
+    // MARK: Surface stack (solid, tonal, never gradient)
 
     static let surface = Color(hex: surfaceHex)
-    static let card = Color(hex: cardHex)
-    static let accentLight = Color(hex: accentLightHex)
-    static let deepGold = Color(hex: deepGoldHex)
-    static let warmGold = Color(hex: warmGoldHex)
+    static let surface1 = Color(hex: surface1Hex)
+    static let surface2 = Color(hex: surface2Hex)
+    static let surface3 = Color(hex: surface3Hex)
+
+    // MARK: Accent & semantic
+
+    static let accent = Color(hex: accentHex)
+    static let accentDeep = Color(hex: accentDeepHex)
+    static let accentBright = Color(hex: accentBrightHex)
+    /// Accent tint used behind selected chips and badges.
+    static let accentSoft = accent.opacity(0.14)
     static let textPrimary = Color(hex: textPrimaryHex)
     static let textMuted = Color(hex: textMutedHex)
     static let danger = Color(hex: dangerHex)
+    static let dangerSoft = danger.opacity(0.12)
 
-    /// Primary gold gradient used for emphasis (`#FDE68A → #B45309`).
-    static var accentGradient: LinearGradient {
-        LinearGradient(
-            colors: [accentLight, deepGold],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
+    // MARK: Borders, glass and depth
 
-    /// Subtle dark surface gradient used behind grouped content.
-    static var panelGradient: LinearGradient {
-        LinearGradient(
-            colors: [Color(hex: "#0E0E0E"), Color(hex: "#171717")],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-
-    /// Warm radial glow used as background atmosphere.
-    static var backgroundGlow: RadialGradient {
-        RadialGradient(
-            colors: [deepGold.opacity(0.22), .clear],
-            center: .topTrailing,
-            startRadius: 10,
-            endRadius: 420
-        )
-    }
-
-    /// Hairline border color for cards.
-    static let border = deepGold.opacity(0.45)
-    static let subtleBorder = deepGold.opacity(0.3)
+    /// Hairline border for cards and panels.
+    static let border = Color.white.opacity(0.10)
+    /// Softer hairline for rows nested inside cards.
+    static let subtleBorder = Color.white.opacity(0.07)
+    /// Slightly stronger edge used on glass surfaces so they read as a pane.
+    static let glassBorder = Color.white.opacity(0.16)
+    /// Translucent fill for glassmorphic surfaces.
+    static let glassFill = Color.white.opacity(0.06)
+    /// Single shadow token used for every elevated surface.
+    static let shadowColor = Color.black.opacity(0.38)
 }

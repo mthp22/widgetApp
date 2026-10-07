@@ -56,7 +56,7 @@ extension WhisperWidgetEntry {
         case let .message(_, phase, effectiveAt):
             switch phase {
             case .upcoming:
-                "Scheduled \(effectiveAt.formatted(date: .omitted, time: .shortened))"
+                "Scheduled \(WhisperFormat.time(effectiveAt))"
             case .active:
                 nil
             }

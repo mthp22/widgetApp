@@ -102,7 +102,7 @@ struct MessageComposerView: View {
                 .font(AppTypography.body)
                 .foregroundStyle(AppColors.textPrimary)
                 .padding(AppTheme.controlPadding)
-                .background(AppColors.card)
+                .background(AppColors.surface2)
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlCornerRadius, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: AppTheme.controlCornerRadius, style: .continuous)
@@ -125,7 +125,7 @@ struct MessageComposerView: View {
                     .font(AppTypography.body)
                     .foregroundStyle(AppColors.textPrimary)
             }
-            .tint(AppColors.accentLight)
+            .tint(AppColors.accent)
 
             if viewModel.isDateEnabled {
                 DatePicker(
@@ -135,7 +135,7 @@ struct MessageComposerView: View {
                     displayedComponents: [.date, .hourAndMinute]
                 )
                 .colorScheme(.dark)
-                .tint(AppColors.accentLight)
+                .tint(AppColors.accent)
                 .accessibilityLabel("Scheduled date and time")
             }
 

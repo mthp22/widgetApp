@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */; };
+		DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in CopyFiles */ = {isa = PBXBuildFile; fileRef = DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */; };
 		DECEF9AA2FD2C4CE005D34ED /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */; };
 		DECEF9AE2FD2C5BD005D34ED /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */; };
 /* End PBXBuildFile section */
@@ -37,13 +37,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		DE1D8002AAAABBBBCCCC0001 /* Embed App Extensions */ = {
+		DE1D8002AAAABBBBCCCC0001 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in Embed App Extensions */,
+				DE1D8000AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +56,16 @@
 		DE1D8003AAAABBBBCCCC0001 /* WhisperWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WhisperWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECEF9A82FD2C4CA005D34ED /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DE5A0002AAAABBBBCCCC0011 /* Exceptions for "WhisperWidgetExtension" folder in "WhisperWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Config/WhisperWidgetExtension-Info.plist,
+			);
+			target = DE1D8009AAAABBBBCCCC0001 /* WhisperWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DE1C6EED2F974F6A007FC243 /* widgetApp */ = {
@@ -75,6 +85,9 @@
 		};
 		DE1D8004AAAABBBBCCCC0001 /* WhisperWidgetExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DE5A0002AAAABBBBCCCC0011 /* Exceptions for "WhisperWidgetExtension" folder in "WhisperWidgetExtension" target */,
+			);
 			path = WhisperWidgetExtension;
 			sourceTree = "<group>";
 		};
@@ -161,7 +174,7 @@
 				DE1C6EE72F974F6A007FC243 /* Sources */,
 				DE1C6EE82F974F6A007FC243 /* Frameworks */,
 				DE1C6EE92F974F6A007FC243 /* Resources */,
-				DE1D8002AAAABBBBCCCC0001 /* Embed App Extensions */,
+				DE1D8002AAAABBBBCCCC0001 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -508,6 +521,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = WhisperWidget;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -542,6 +556,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = WhisperWidget;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

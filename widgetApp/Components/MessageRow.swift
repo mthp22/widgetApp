@@ -16,7 +16,7 @@ enum MessageScheduleText {
         if !days.isEmpty {
             let names = RepeatDay.shortNames(for: days)
             if let time = scheduledDate {
-                return "Repeats \(names) · \(time.formatted(date: .omitted, time: .shortened))"
+                return "Repeats \(names) · \(WhisperFormat.time(time))"
             }
             return "Repeats \(names)"
         }
@@ -26,10 +26,10 @@ enum MessageScheduleText {
         }
 
         if scheduledDate > Date() {
-            return "One-time · \(scheduledDate.formatted(date: .abbreviated, time: .shortened))"
+            return "One-time · \(WhisperFormat.dateTime(scheduledDate))"
         }
 
-        return "In effect since \(scheduledDate.formatted(date: .abbreviated, time: .shortened))"
+        return "In effect since \(WhisperFormat.dateTime(scheduledDate))"
     }
 
     /// VoiceOver friendly description combining content, schedule and style.
@@ -71,10 +71,13 @@ struct MessageRow: View {
 
                 Text(message.widgetStyle.title)
                     .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundStyle(AppColors.accentLight)
+                    .foregroundStyle(AppColors.accent)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(AppColors.accentLight.opacity(0.12))
+                    .background(AppColors.accentSoft)
+                    .overlay {
+                        Capsule().stroke(AppColors.accent.opacity(0.35), lineWidth: 1)
+                    }
                     .clipShape(Capsule())
                     .accessibilityHidden(true)
             }
@@ -97,7 +100,7 @@ private struct CurrentBadge: View {
             .foregroundStyle(AppColors.surface)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
-            .background(AppColors.accentGradient)
+            .background(AppColors.accent)
             .clipShape(Capsule())
             .accessibilityLabel("Currently shown in the widget")
     }
