@@ -1,26 +1,32 @@
 import SwiftUI
 import Foundation
 
-/// Storage, widget and about information.
+/// Storage and about information.
 ///
 /// Everything shown here is read from the live configuration and the live
 /// message library — there is no sample data behind this screen.
+///
+/// The App Group status row and the manual widget reload section are
+/// deliberately not shown: widget refreshes happen automatically every
+/// 15 minutes and whenever a message changes, so nothing here needs to
+/// expose or explain them.
 struct SettingsView: View {
     @EnvironmentObject private var manager: MessageManager
 
-    @State private var refreshFeedback: String?
+    @State private var isConfirmingDeleteAll = false
+    @State private var deleteAllFeedback: String?
 
     var body: some View {
         NavigationStack {
             List {
                 storageSection
-                widgetSection
                 aboutSection
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .whisperScreenBackground()
             .navigationTitle("Settings")
+            .whisperToolbarBackground()
         }
     }
 
@@ -30,64 +36,61 @@ struct SettingsView: View {
         Section {
             LabeledContent("Saved messages", value: "\(manager.messages.count)")
 
-            LabeledContent("Shared storage") {
-                Text(SharedStorageURLFactory.makeStorageURL().lastPathComponent)
+            if let deleteAllFeedback {
+                Text(deleteAllFeedback)
                     .font(AppTypography.caption)
-                    .foregroundStyle(AppColors.textMuted)
+                    .foregroundStyle(AppColors.accent)
+                    .transition(.whisperRise)
+                    .accessibilityLabel(deleteAllFeedback)
             }
 
-            LabeledContent {
-                Label(
-                    usesSharedContainer ? "Available" : "Unavailable",
-                    systemImage: usesSharedContainer ? "checkmark.circle" : "xmark.circle"
-                )
-                .foregroundStyle(usesSharedContainer ? AppColors.accent : AppColors.danger)
+            Button(role: .destructive) {
+                isConfirmingDeleteAll = true
             } label: {
-                Text("App Group")
+                Label("Delete all messages", systemImage: "trash")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
             }
-            .accessibilityLabel("App Group \(usesSharedContainer ? "available" : "unavailable")")
+            .buttonStyle(DangerButtonStyle())
+            .disabled(manager.messages.isEmpty)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+            .accessibilityIdentifier("settings.deleteAllButton")
+            .accessibilityHint("Removes every saved message from the app and the widget")
+            .confirmationDialog(
+                "Delete all messages?",
+                isPresented: $isConfirmingDeleteAll,
+                titleVisibility: .visible
+            ) {
+                Button("Delete All", role: .destructive) {
+                    deleteAll()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This removes all \(manager.messages.count) saved messages from your library and your widget.")
+            }
         } header: {
             Text("Storage")
                 .textCase(nil)
         } footer: {
             Text(
-                usesSharedContainer
-                    ? "Messages are stored in the App Group container, which is how the widget reads them."
-                    : "The App Group container is not reachable, so the widget cannot read new messages yet. Enable the App Group capability for both targets."
+                "Messages are kept in the app's shared storage, which is how the widget reads them. "
+                    + "The widget refreshes automatically every 15 minutes and immediately after any change."
             )
             .font(AppTypography.caption)
-        }
-    }
-
-    private var widgetSection: some View {
-        Section {
-            Button {
-                manager.refreshWidget()
-                refreshFeedback = "Widget timelines reloaded."
-            } label: {
-                Label("Reload widget now", systemImage: "arrow.clockwise")
-            }
-            .accessibilityHint("Asks WidgetKit to rebuild the widget timeline")
-
-            if let refreshFeedback {
-                Text(refreshFeedback)
-                    .font(AppTypography.caption)
-                    .foregroundStyle(AppColors.accent)
-                    .accessibilityLabel(refreshFeedback)
-            }
-        } header: {
-            Text("Widget")
-                .textCase(nil)
-        } footer: {
-            Text("iOS decides when widget content is refreshed. Editing a message already requests a reload automatically.")
-                .font(AppTypography.caption)
         }
     }
 
     private var aboutSection: some View {
         Section {
             LabeledContent("Version", value: appVersion)
-            LabeledContent("Widget kind", value: WhisperStorageConfiguration.widgetKind)
+
+            NavigationLink {
+                UsageView()
+            } label: {
+                Label("Usage", systemImage: "questionmark.circle")
+            }
+            .accessibilityHint("Opens a step-by-step guide to using the app")
         } header: {
             Text("About")
                 .textCase(nil)
@@ -97,11 +100,20 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - State
+    // MARK: - Actions
 
-    private var usesSharedContainer: Bool {
-        SharedStorageURLFactory.isUsingAppGroupContainer()
+    private func deleteAll() {
+        do {
+            try manager.deleteAllMessages()
+            deleteAllFeedback = "All messages deleted."
+        } catch {
+            // Failures surface through `MessageManager.lastPersistenceError`,
+            // which the message list renders as a storage problem.
+            deleteAllFeedback = nil
+        }
     }
+
+    // MARK: - State
 
     private var appVersion: String {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String

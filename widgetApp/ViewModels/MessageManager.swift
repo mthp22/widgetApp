@@ -17,6 +17,7 @@ protocol MessageManaging: AnyObject {
     func createMessage(content: String, scheduledDate: Date?, repeatDays: Set<Int>?, style: MessageStyle) throws
     func updateMessage(_ message: Message) throws
     func deleteMessage(id: UUID) throws
+    func deleteAllMessages() throws
 
     func nextScheduledEntry(at date: Date) -> ScheduledMessage?
     func scheduledDate(for message: Message, after date: Date) -> Date?
@@ -117,6 +118,16 @@ final class MessageManager: ObservableObject, MessageManaging {
         }
 
         try persist(messages.filter { $0.id != id })
+    }
+
+    /// Removes every stored message in a single write.
+    ///
+    /// Persisting `[]` goes through exactly the same code path as a single
+    /// delete, so the widget is reloaded and any storage failure is reported
+    /// through `lastPersistenceError`.
+    func deleteAllMessages() throws {
+        guard !messages.isEmpty else { return }
+        try persist([])
     }
 
     // MARK: - Private

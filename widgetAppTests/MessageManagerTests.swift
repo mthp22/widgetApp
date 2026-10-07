@@ -118,6 +118,53 @@ final class MessageManagerTests: XCTestCase {
         XCTAssertEqual(reloader.reloadCount, 1)
     }
 
+    func testDeleteAllMessagesEmptiesStorageAndRefreshesTheWidget() throws {
+        let repository = InMemoryMessageRepository(seed: [
+            Message(content: "One", scheduledDate: nil, repeatDays: nil, widgetStyle: .bold),
+            Message(content: "Two", scheduledDate: nil, repeatDays: nil, widgetStyle: .casual),
+            Message(content: "Three", scheduledDate: nil, repeatDays: nil, widgetStyle: .formal)
+        ])
+        let (manager, reloader) = makeManager(repository: repository)
+
+        try manager.deleteAllMessages()
+
+        XCTAssertTrue(manager.messages.isEmpty)
+        XCTAssertTrue(repository.stored.isEmpty)
+        XCTAssertEqual(repository.saveCount, 1)
+        XCTAssertEqual(reloader.reloadCount, 1)
+        XCTAssertNil(manager.lastPersistenceError)
+    }
+
+    func testDeleteAllMessagesOnAnEmptyLibraryWritesNothing() throws {
+        let repository = InMemoryMessageRepository()
+        let (manager, reloader) = makeManager(repository: repository)
+
+        try manager.deleteAllMessages()
+
+        XCTAssertTrue(manager.messages.isEmpty)
+        XCTAssertEqual(repository.saveCount, 0)
+        XCTAssertEqual(reloader.reloadCount, 0)
+    }
+
+    func testDeleteAllMessagesSurfacesAStorageFailure() throws {
+        let repository = InMemoryMessageRepository(seed: [
+            Message(content: "Kept for now", scheduledDate: nil, repeatDays: nil, widgetStyle: .bold)
+        ])
+        let (manager, reloader) = makeManager(repository: repository)
+        repository.errorToThrow = NSError(
+            domain: "WhisperWidgetTests",
+            code: 4,
+            userInfo: [NSLocalizedDescriptionKey: "Disk full"]
+        )
+
+        XCTAssertThrowsError(try manager.deleteAllMessages())
+
+        // The write failed, so the UI must keep showing what is really stored.
+        XCTAssertEqual(manager.messages.count, 1)
+        XCTAssertNotNil(manager.lastPersistenceError)
+        XCTAssertEqual(reloader.reloadCount, 0)
+    }
+
     // MARK: - Failure handling
 
     func testFailedSaveKeepsInMemoryStateConsistentAndSurfacesTheError() throws {
