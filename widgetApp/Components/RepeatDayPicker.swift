@@ -61,7 +61,7 @@ private struct DayToggleChip: View {
             .background(isSelected ? AnyShapeStyle(AppColors.accent) : AnyShapeStyle(AppColors.surface2))
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.chipCornerRadius, style: .continuous))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.whisperPress)
         .accessibilityLabel(day.fullName)
         .accessibilityHint(isSelected ? "Selected, double tap to remove" : "Double tap to repeat on this day")
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])

@@ -20,7 +20,6 @@ struct MessageListView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .whisperScreenBackground()
-            .animation(AppMotion.entrance, value: manager.messages.count)
             .navigationTitle("WhisperWidget")
             .whisperToolbarBackground()
             .searchable(
@@ -59,7 +58,9 @@ struct MessageListView: View {
             Section {
                 currentWidgetCard(for: display)
                     .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                    .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
+                    .transition(.whisperSettle)
             } header: {
                 Text(display.phase == .active ? "On your widget now" : "Next on your widget")
                     .font(AppTypography.caption)
@@ -82,6 +83,8 @@ struct MessageListView: View {
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+            .listRowSeparator(.hidden)
+            .transition(.whisperSettle)
         } else if filteredMessages.isEmpty {
             EmptyStateView(
                 systemImage: "magnifyingglass",
@@ -90,9 +93,10 @@ struct MessageListView: View {
             )
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+            .listRowSeparator(.hidden)
         } else {
             Section {
-                ForEach(filteredMessages) { message in
+                ForEach(Array(filteredMessages.enumerated()), id: \.element.id) { index, message in
                     NavigationLink(value: message) {
                         MessageRow(
                             message: message,
@@ -101,6 +105,14 @@ struct MessageListView: View {
                     }
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+                    .listRowSeparator(.hidden)
+                    .transition(.whisperRise)
+                    .animation(
+                        AppMotion.entrance.delay(
+                            Double(min(index, AppMotion.staggerCap)) * AppMotion.stagger
+                        ),
+                        value: manager.messages.count
+                    )
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             delete(message)

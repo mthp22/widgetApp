@@ -49,7 +49,7 @@ struct MessageRow: View {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(message.normalizedContent)
                     .font(message.widgetStyle.font)
-                    .foregroundStyle(message.widgetStyle.foregroundColor)
+                    .foregroundStyle(AppColors.textPrimary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
@@ -66,7 +66,6 @@ struct MessageRow: View {
                     .foregroundStyle(AppColors.textMuted)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-
                 Spacer(minLength: 0)
 
                 Text(message.widgetStyle.title)

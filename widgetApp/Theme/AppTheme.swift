@@ -90,27 +90,6 @@ struct WhisperGlassModifier: ViewModifier {
 
 // MARK: - Press feedback
 
-/// Spring-based press feedback for arbitrary surfaces: a small scale and
-/// opacity change while the finger is down.
-struct WhisperPressModifier: ViewModifier {
-    var scale: CGFloat = AppMotion.pressScale
-
-    @State private var isPressed = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    func body(content: Content) -> some View {
-        content
-            .scaleEffect(isPressed && !reduceMotion ? scale : 1)
-            .opacity(isPressed ? 0.9 : 1)
-            .animation(reduceMotion ? nil : AppMotion.snappy, value: isPressed)
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in isPressed = true }
-                    .onEnded { _ in isPressed = false }
-            )
-    }
-}
-
 /// Spring-based press feedback for a surface whose pressed state is already
 /// known — used by the button styles so Reduced Motion is honoured.
 struct WhisperPressEffectModifier: ViewModifier {
@@ -124,6 +103,21 @@ struct WhisperPressEffectModifier: ViewModifier {
             .opacity(isPressed ? 0.9 : 1)
             .animation(reduceMotion ? nil : AppMotion.snappy, value: isPressed)
     }
+}
+
+/// Press-only button style: keeps the label exactly as authored and adds the
+/// shared scale/opacity response. Used where a full surface style would fight
+/// the surrounding list layout (day chips, toolbar actions).
+struct WhisperPressButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .whisperPressEffect(isPressed: configuration.isPressed)
+    }
+}
+
+extension ButtonStyle where Self == WhisperPressButtonStyle {
+    /// `.buttonStyle(.whisperPress)`
+    static var whisperPress: WhisperPressButtonStyle { WhisperPressButtonStyle() }
 }
 
 // MARK: - View modifiers
@@ -150,11 +144,6 @@ extension View {
         modifier(WhisperGlassModifier(cornerRadius: cornerRadius, padding: padding))
     }
 
-    /// Adds spring-based press feedback to a tappable surface.
-    func whisperPress(scale: CGFloat = AppMotion.pressScale) -> some View {
-        modifier(WhisperPressModifier(scale: scale))
-    }
-
     /// Applies press feedback when the pressed state comes from a button.
     func whisperPressEffect(isPressed: Bool) -> some View {
         modifier(WhisperPressEffectModifier(isPressed: isPressed))
@@ -166,9 +155,12 @@ extension View {
     }
 
     /// Material toolbar background shared by every screen.
+    ///
+    /// The background is requested but its visibility stays automatic, which
+    /// lets iOS decide when the glass sits behind scrolling content — forcing
+    /// it visible hides the large navigation title on iOS 26.
     func whisperToolbarBackground() -> some View {
         toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackgroundVisibility(.visible, for: .navigationBar)
     }
 }
 

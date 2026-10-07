@@ -22,13 +22,16 @@ struct MessageComposerView: View {
             ScrollView {
                 VStack(spacing: AppTheme.sectionSpacing) {
                     composerCard
+                        .transition(.whisperSettle)
                 }
                 .padding(AppTheme.sectionSpacing)
+                .animation(AppMotion.entrance, value: viewModel.isEditing)
             }
             .scrollBounceBehavior(.basedOnSize)
             .whisperScreenBackground()
             .navigationTitle(viewModel.title)
             .navigationBarTitleDisplayMode(.inline)
+            .whisperToolbarBackground()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

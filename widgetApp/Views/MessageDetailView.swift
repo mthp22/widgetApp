@@ -30,6 +30,7 @@ struct MessageDetailView: View {
         .whisperScreenBackground()
         .navigationTitle("Message")
         .navigationBarTitleDisplayMode(.inline)
+        .whisperToolbarBackground()
         .sheet(item: $editingMessage) { message in
             MessageComposerView(initialMessage: message)
         }
@@ -53,10 +54,14 @@ struct MessageDetailView: View {
         ScrollView {
             VStack(spacing: AppTheme.sectionSpacing) {
                 previewCard(for: message)
+                    .transition(.whisperSettle)
                 scheduleCard(for: message)
+                    .transition(.whisperSettle)
                 actions
+                    .transition(.whisperSettle)
             }
             .padding(AppTheme.sectionSpacing)
+            .animation(AppMotion.entrance, value: message.id)
         }
         .scrollBounceBehavior(.basedOnSize)
     }
